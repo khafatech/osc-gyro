@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Device Orientation</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    </head>
+    <body>
+        <h1>Device Orientation</h1>
+        <table>
+            <tr>
+                <td>Title Left/Right [gamma]</td>
+                <td id='doTiltLR'></td>
+            </tr>
+            <tr>
+                <td>Title Front/Back [beta]</td>
+                <td id='doTiltFB'></td>
+            </tr>
+            <tr>
+                <td>Direction [alpha]</td>
+                <td id='doDirection'></td>
+            </tr>
+        </table>
+
+        <script>
+        $( document ).ready(function() {
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', function(event) {
+                    // gamma is the left-to-right tilt in degrees, where right is positive
+                    var tiltLR = event.gamma;
+
+
+                    document.getElementById('doTiltLR').innerHTML = Math.round(tiltLR);
+                    
+                    // beta is the front-to-back tilt in degrees, where front is positive
+                    var tiltFB = event.beta;
+                    document.getElementById('doTiltFB').innerHTML = Math.round(tiltFB);
+                    
+                    // alpha is the compass direction the device is facing in degrees
+                    var dir = event.alpha;
+                    document.getElementById('doDirection').innerHTML = Math.round(dir);
+
+                    $.get('/axis/?a=' + dir + '&b=' + tiltFB + '&g=' + tiltLR);
+
+                }, false);
+                
+            }
+        });
+        </script>
+    </body>
+</html>
